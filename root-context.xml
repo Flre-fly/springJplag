@@ -1,0 +1,4 @@
+<!--  파일업로드 디렉토리 설정 -->
+<bean id="uploadPath" class="java.lang.String">
+    <constructor-arg value="C:\Users\user\Downloads\jplag (1)\jplag\uploads"/>
+</bean>

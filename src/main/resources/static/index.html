@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>코드 유사도 검사</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id="menu">
+    <ul>
+        <li><a href="#">과제1</a>
+            <ul>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+        <li><a href="#">과제2</a>
+            <ul>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+        <li><a href="#">과제3</a>
+            <ul>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+        <li><a href="#">과제4</a>
+            <ul>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+        <li><a href="#">과제5</a>
+            <ul>
+                <li><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+<form method="post" enctype="multipart/form-data">
+    <div class="button">
+        <label for="chooseFile">
+            👉 CLICK HERE! 👈
+        </label>
+    </div>
+    <input type="file" id="chooseFile" name="chooseFile" accept="image/*" onchange="loadFile(this)">
+    <div class="buttonContainer" onClick="location.href='/upload'">>
+        <div class="submitButton" id="submitButton">Upload</div>
+    </div>
+</form>
+
+</body>
+</html>
