@@ -21,7 +21,7 @@ import java.util.UUID;
 public class MainController {
     @GetMapping("/")
     public String defaultFunc(){
-
+        return "";
     }
 
     //RequestMapping이란
