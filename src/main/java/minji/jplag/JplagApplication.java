@@ -23,8 +23,9 @@ public class JplagApplication {
 		//command.add("cmd");
 		command.add("java");
 		command.add("-jar");
-		command.add("C:/Users/user/Desktop/minji/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
-		command.add("C:/Users/user/Desktop/minji/codes/students");//test코드들이잇는 파일의 위치
+		command.add("C:/Users/firef/OneDrive/바탕 화면/김민지/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
+		command.add("C:/Users/firef/OneDrive/바탕 화면/김민지/연구실/codes");//test코드들이잇는 파일의 위치
+
 		try{
 			Process process = new ProcessBuilder(command).start();
 			BufferedReader outReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
