@@ -16,6 +16,8 @@ import static java.util.Collections.reverse;
 public class JplagApplication {
 
 	public static void main(String[] args) throws IOException {
+
+		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		SpringApplication.run(JplagApplication.class, args);
 
 		//test
@@ -23,8 +25,8 @@ public class JplagApplication {
 		//command.add("cmd");
 		command.add("java");
 		command.add("-jar");
-		command.add("C:/Users/firef/OneDrive/바탕 화면/김민지/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
-		command.add("C:/Users/firef/OneDrive/바탕 화면/김민지/연구실/codes");//test코드들이잇는 파일의 위치
+		command.add("C:\\Users\\User\\Desktop\\MinjiKim\\jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
+		command.add("C:\\Users\\User\\IdeaProjects\\springJplag\\codes");//test코드들이잇는 파일의 위치
 
 		try{
 			Process process = new ProcessBuilder(command).start();

@@ -1,7 +1,10 @@
 package minji.jplag.controller;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import minji.jplag.dto.FileDto;
+import minji.jplag.service.FileService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,31 +22,51 @@ import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-@RestController
-@Log4j2
-public class MainController {
+@Controller
+@Slf4j
 
+public class MainController {
+    @Value("${file.dir}")
+    private String fileDir;
+
+    private FileService fileService;
+
+    public MainController(FileService fileService) {
+        this.fileService = fileService;
+    }
+    @GetMapping("upload")
+    public String upload(){
+        return "uploadResult";
+    }
     //RequestMapping이란
     //클라이언트의 요청을 처리할 메서드구현
-    @RequestMapping(value="/uploadResult", method= RequestMethod.POST)
-    public ResponseEntity<List<FileDto>> fileupload(@RequestParam MultipartFile[] uploadfile, Model model) throws IllegalStateException, IOException {
-        List<FileDto> files = new ArrayList<>();
-        System.out.println(uploadfile);
-        for (MultipartFile file : uploadfile) {
-            FileDto dto = new FileDto("201911773", file.getOriginalFilename());
-            files.add(dto);
-            //test
-            System.out.println(file.getOriginalFilename());
+    @PostMapping("/upload")
+    public String fileupload(@RequestParam MultipartFile uploadfile,
+                             @RequestParam String fileName,//
+                             Model model,
+                             HttpServletRequest request) throws IllegalStateException, IOException {
 
-            File newFileName = new File(dto.getStudentId() + "_" + dto.getFileName());
-            // 전달된 내용을 실제 물리적인 파일로 저장해준다.
-            file.transferTo(newFileName);
 
-        }
-        model.addAttribute("files", files);//files로 추가했으니 uploadResult.html에거 files로 찾을 수 있어
-        return new ResponseEntity<>(files, HttpStatus.OK);
+        String fullPath = fileDir + fileName;
+        System.out.println(fullPath);
+        //이거 이름같을경우 예외처리도 해줘야함
+        FileDto file = FileDto.builder()
+                .origFilename(uploadfile.getOriginalFilename())
+                .filename(uploadfile.getName())
+                .filePath(fullPath)
+                .build();
+
+        uploadfile.transferTo(new File(fileDir));
+        System.out.println(uploadfile.getResource().getFile().getAbsolutePath());
+        extractZipFiles(uploadfile.getResource().getFile().getAbsolutePath(),fullPath);
+        fileService.saveFile(file);
+
+        model.addAttribute("file", file);//files로 추가했으니 uploadResult.html에거 files로 찾을 수 있어
+
+
+        return "uploadResult";
     }
-    @PostMapping("/extractZip")
+
     public static boolean extractZipFiles(String zip_file, String directory) {
         boolean result = false;
 
