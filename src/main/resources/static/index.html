@@ -56,9 +56,9 @@
 
 
 
-<form method="post" enctype="multipart/form-data" th:action="@{/upload}">
-    <li>파일명<input type="text" id="fileName" name="fileName"></li>
-    <input type="file" id="uploadfile" name="uploadfile" accept="*/*">
+<form class="button" method="post" enctype="multipart/form-data" action="/upload">
+    <li>파일명<input  type="text" id="fileName" name="fileName"></li>
+    <input  type="file" id="uploadfile" name="uploadfile" accept="*/*">
     <input class = "buttonContainer" type="submit"/>
 </form>
 

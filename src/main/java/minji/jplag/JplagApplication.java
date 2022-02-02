@@ -17,7 +17,6 @@ public class JplagApplication {
 
 	public static void main(String[] args) throws IOException {
 
-		System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		SpringApplication.run(JplagApplication.class, args);
 
 		//test

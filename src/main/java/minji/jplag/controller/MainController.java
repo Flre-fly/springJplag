@@ -63,11 +63,14 @@ public class MainController {
 
         //String despath = new ClassPathResource(fullPath).getFile().getAbsolutePath();
         //압축파일이 multipartfile의 경로..
-        String beforeFilePath = fileDir +"\\"+"before.zip";
+        String beforeFilePath = fileDir +"\\"+ fileName + "\\" + file.getFilename() + ".zip";
+        //fullpath에 해당하는 곳에 dir를 만들ㄹ어준다
+        new File(fullPath).mkdir();
+        //
         File beforeZipFile = new File(beforeFilePath);
         uploadfile.transferTo(new File(beforeFilePath));
 
-        extractZipFiles(beforeZipFile,fileDir);
+        extractZipFiles(beforeZipFile,fullPath);
 
         beforeZipFile.delete();
 
