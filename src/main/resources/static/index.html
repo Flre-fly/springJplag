@@ -1,6 +1,6 @@
 
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8" />
@@ -48,16 +48,18 @@
     </ul>
 
 </div>
-<form method="post" enctype="multipart/form-data">
-    <div class="button">
-        <label for="chooseFile">
-            👉 CLICK HERE! 👈
-        </label>
-    </div>
-    <input type="file" id="chooseFile" name="chooseFile" accept="image/*" onchange="loadFile(this)">
-    <div class="buttonContainer" onClick="location.href='/upload'">>
-        <div class="submitButton" id="submitButton">Upload</div>
-    </div>
+<div class="button">
+    <label for="uploadfile">
+        👉 CLICK HERE! 👈
+    </label>
+</div>
+
+
+
+<form method="post" enctype="multipart/form-data" th:action="@{/upload}">
+    <li>파일명<input type="text" id="fileName" name="fileName"></li>
+    <input type="file" id="uploadfile" name="uploadfile" accept="*/*">
+    <input class = "buttonContainer" type="submit"/>
 </form>
 
 </body>

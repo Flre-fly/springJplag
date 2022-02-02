@@ -40,17 +40,12 @@ public class MainController {
     public MainController(FileService fileService) throws IOException {
         this.fileService = fileService;
     }
-    @GetMapping("upload")
-    public String upload(){
-        return "uploadResult";
-    }
     //RequestMapping이란
     //클라이언트의 요청을 처리할 메서드구현
     @PostMapping("/upload")
     public String fileupload(@RequestParam MultipartFile uploadfile,
                              @RequestParam String fileName,//
-                             Model model,
-                             HttpServletRequest request) throws IllegalStateException, IOException {
+                             Model model) throws IllegalStateException, IOException {
 
         //String fileDir = new ClassPathResource("/static/files").getFile().getAbsolutePath();
 
@@ -58,15 +53,13 @@ public class MainController {
         String fileDir = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
 
         String fullPath = fileDir +"\\"+ fileName;// /아니고 \\임
-        String filePath = fileDir +"\\"+ fileName + ".zip";
         //이거 이름같을경우 예외처리도 해줘야함
         FileDto file = FileDto.builder()
                 .origFilename(uploadfile.getOriginalFilename())
-                .filename(uploadfile.getName())
+                .filename(fileName)
                 .filePath(fullPath)
                 .build();
         //압축파일 넘어온것까진 괜찮은데.. 이제..압축파일을 풀어야함
-
 
         //String despath = new ClassPathResource(fullPath).getFile().getAbsolutePath();
         //압축파일이 multipartfile의 경로..

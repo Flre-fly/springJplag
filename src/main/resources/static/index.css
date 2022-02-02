@@ -50,7 +50,7 @@ label {
 }
 
 /* 못생긴 기존 input 숨기기 */
-#chooseFile {
+#uploadfile {
     visibility: hidden;
 }
 .buttonContainer {
