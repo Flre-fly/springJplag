@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8" />
+    <title>코드 유사도 검사</title>
+    <link rel="stylesheet" href="/index.css">
+</head>
+<body>
+<div id="menu">
+    <ul>
+        <li th:each="file : ${files}"><a href="#">[[${file.filename}]]</a>
+            <ul>
+                <li ><a href="#">2019</a></li>
+                <li><a href="#">2018</a></li>
+                <li><a href="#">2017</a></li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+<div class="button">
+    <label for="uploadfile">
+        파일추가버튼
+    </label>
+</div>
+
+
+
+<form class="button" method="post" enctype="multipart/form-data" action="/upload">
+    <li>파일명<input  type="text" id="fileName" name="fileName"></li>
+    <input  type="file" id="uploadfile" name="uploadfile" accept="*/*">
+    <input class = "buttonContainer" type="submit"/>
+</form>
+
+</body>
+</html>
