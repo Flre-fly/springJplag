@@ -18,7 +18,8 @@ public class SubjectService {
 
     @Transactional
     public Long saveFile(SubjectDto subjectDto) {
-        return subjectRepository.save(subjectDto.toEntity()).getId();
+        System.out.println(subjectRepository.save(subjectDto.toEntity()) + "ASDADADA");
+        return subjectRepository.save(subjectDto.toEntity()).getSubject_id();
     }
 
     @Transactional

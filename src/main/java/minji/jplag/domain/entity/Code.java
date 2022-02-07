@@ -1,43 +1,37 @@
 package minji.jplag.domain.entity;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Code {
-    @Id
-    @Column(name = "code_id")
-    @GeneratedValue
-    private Long id;
+    @Id//얘는 pk이다 라는걸 알려주는 어노테이션
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long code_id;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "subject_id")
+    private Subject subject;
 
     @Column(nullable = false)
-    String studentNum;
+    private String studentNum;
 
     @Column(nullable = false)
-    String studentName;
+    private String studentName;
 
     @Column(nullable = false)
-    String filePath;
+    private String filePath;
 
     @Column(nullable = false)
-    String code_year;
+    private String code_year;
 
     @Column(nullable = false)
-    String assignmentNum;
+    private String assignmentNum;
 
-    @Builder
-    public Code(String studentNum, String studentName,String year, String assignmentNum,  String filePath) {
-        this.studentName = studentName;
-        this.studentNum = studentNum;
-        this.assignmentNum = assignmentNum;
-        this.code_year = year;
-        this.filePath = filePath;
-    }
 
 }

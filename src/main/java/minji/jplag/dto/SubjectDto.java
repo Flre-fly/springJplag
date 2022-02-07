@@ -7,32 +7,24 @@ import minji.jplag.domain.entity.Code;
 import minji.jplag.domain.entity.Subject;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@Builder
 public class SubjectDto {
-    @Id
-    private Long id;
-    private String origFilename;
+    //dto는 id가 필요 없음
     private String filename;
     private String filePath;
-    private List<Code> codes;
 
 
     public Subject toEntity(){
         Subject subject = Subject.builder()
                 .filename(filename)
                 .filePath(filePath)
-                .codes(codes)
                 .build();
 
         return subject;
-    }
-    @Builder
-    public SubjectDto(String filename, String filePath, List<Code> codes) {
-        this.filename = filename;
-        this.filePath = filePath;
-        this.codes = codes;
     }
 }
