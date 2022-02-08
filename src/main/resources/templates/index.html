@@ -10,7 +10,7 @@
 <body>
 <div id="menu">
     <ul>
-        <li th:each="file : ${files}"><a href="#">[[${file.filename}]]</a>
+        <li th:each="code : ${codes}"><a href="#">[[${code.getStudentNum}]]</a>
             <ul>
                 <li ><a href="#">2019</a></li>
                 <li><a href="#">2018</a></li>

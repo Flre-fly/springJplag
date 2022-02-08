@@ -12,11 +12,11 @@ import javax.persistence.*;
 public class Code {
     @Id//얘는 pk이다 라는걸 알려주는 어노테이션
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "code_id", nullable = true)
     private Long code_id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "subject_id")
-    private Subject subject;
+    @Column(nullable = false)
+    private String subjectName;
 
     @Column(nullable = false)
     private String studentNum;

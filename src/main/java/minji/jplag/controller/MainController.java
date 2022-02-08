@@ -2,16 +2,11 @@ package minji.jplag.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import minji.jplag.domain.entity.Code;
-import minji.jplag.domain.entity.Subject;
 import minji.jplag.dto.CodeDTO;
-import minji.jplag.dto.SubjectDto;
 import minji.jplag.service.CodeService;
-import minji.jplag.service.SubjectService;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
-import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.stereotype.Controller;
@@ -26,27 +21,17 @@ import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-import net.lingala.zip4j.ZipFile;
-
-import static org.springframework.data.util.StreamUtils.zip;
 
 @Controller
 @Slf4j
 public class MainController {
-    private static SubjectService subjectService;
     private static CodeService codeService;
 
-    public MainController(SubjectService subjectService, CodeService codeService) throws IOException {
-        this.subjectService = subjectService;
+    public MainController(CodeService codeService) throws IOException {
         this.codeService = codeService;
     }
     @GetMapping("/")
     public String defaultFunc(Model model){
-        //디비에서 file을 꺼내서 model에 넘겨준다
-        model.addAttribute("files", subjectService.getFiles());
 
         return "index";
     }
@@ -82,35 +67,22 @@ public class MainController {
         File beforeZipFile = new File(beforeFilePath);
         //파일을 생성하였다
         File newfile = new File(beforeFilePath);
+        //newfile을 생성한다 경로 : beforefilepath
         uploadfile.transferTo(newfile);
 
+        //압축해제 filedir라는 dir를 만들고, 뒤의 인자는 압축대상파일이다
         decompress(new File(fileDir), beforeZipFile);
+        //압축된파일을 지운다
         beforeZipFile.delete();
         //압축을 풀었으니 이제 subject 하위의 assignment나 code나 codebyyear에 대해 만들어줘야함
 
-
-
-
-        //code를 subjectdto에 넣어준다
-
-        SubjectDto file = SubjectDto.builder()
-                .filename(filename)
-                .filePath(subjectPath)
-                .build();
-
-        makeCodeDto(subjectPath, file);
-        //uploadfile.transferTo(new Subject(fileDir));//fileDir에 파일 저장, 파일에 대한 경로는 fullPath
-
-        //나중에 추가
-        subjectService.saveFile(file);
-
-        model.addAttribute("files", file);//files로 추가했으니 uploadResult.html에거 files로 찾을 수 있어
-
+        //code에 대한 entity를 만들어 넘긴다
+        makeCodeDto(subjectPath, filename, model);
 
         return "uploadResult";
     }
 
-    public static void makeCodeDto(String subjectPath, SubjectDto subjectDto) throws UnsupportedEncodingException {
+    public static void makeCodeDto(String subjectPath, String filename, Model model) throws UnsupportedEncodingException {
         File subject = new File(subjectPath);
         File[] fList = subject.listFiles();
 
@@ -126,13 +98,16 @@ public class MainController {
                     .code_year(info[0])
                     .assignmentNum(info[1])
                     .studentNum(info[2])
-                    .subjectdto(subjectDto)
+                    .subjectName(filename)
                     .studentName(info[3])
                     .filePath(codePath).build();
 
+
             codeService.saveFile(code);
 
+            model.addAttribute("codes", code);
 
+            System.out.println(model.getAttribute("codes")+"Sdasdasdsadsadsd");
         }
     }
 

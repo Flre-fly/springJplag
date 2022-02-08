@@ -1,26 +1,26 @@
 package minji.jplag.service;
 
 import minji.jplag.domain.entity.Code;
-import minji.jplag.domain.entity.Subject;
 import minji.jplag.dto.CodeDTO;
-import minji.jplag.dto.SubjectDto;
 import minji.jplag.repository.CodeRepository;
-import minji.jplag.repository.SubjectRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class CodeService {
     private CodeRepository codeRepository;
-
+    EntityManager em;
     public CodeService(CodeRepository codeRepository) {
         this.codeRepository = codeRepository;
     }
 
     @Transactional
     public Long saveFile(CodeDTO codeDto) {
+        //System.out.println(codeDto.toEntity().getCode_year() + "dddddddddddd");
+        //em.persist(codeDto.toEntity());
         return codeRepository.save(codeDto.toEntity()).getCode_id();
     }
 
@@ -39,7 +39,10 @@ public class CodeService {
         return codeDTO;
     }
 
+
     public List<Code> getFiles(){
         return codeRepository.findAll();
     }
+
+
 }
