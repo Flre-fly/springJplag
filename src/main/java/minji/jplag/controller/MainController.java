@@ -1,8 +1,12 @@
 package minji.jplag.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import minji.jplag.dto.AssignmentDto;
 import minji.jplag.dto.CodeDto;
+import minji.jplag.dto.SubjectDto;
+import minji.jplag.service.AssignmentService;
 import minji.jplag.service.CodeService;
+import minji.jplag.service.SubjectService;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
@@ -17,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +29,15 @@ import java.util.List;
 @Slf4j
 public class MainController {
     private static CodeService codeService;
+    private static SubjectService subjectService;
+    private static AssignmentService assignmentService;
 
     @Autowired//생성자의 인자로 들어오는 변수들에 의존관계를 자동으로 주입해준다
-    public MainController(CodeService codeService) throws IOException {
+    public MainController(CodeService codeService, SubjectService subjectService, AssignmentService assignmentService) throws IOException {
         this.codeService = codeService;
-    }
-    @GetMapping("/")
-    public String defaultFunc(Model model){
+        this.subjectService = subjectService;
+        this.assignmentService = assignmentService;
 
-        return "index";
     }
     //RequestMapping이란
     //클라이언트의 요청을 처리할 메서드구현
@@ -80,36 +83,65 @@ public class MainController {
         //code에 대한 entity를 만들어 넘긴다
         makeCodeDto(subjectPath, filename, model);
 
-        return "index";
+        return "index2";
     }
+    public static void makeCodeDto(String subjectPath, String subjectName, Model model) throws UnsupportedEncodingException {
 
-    public static void makeCodeDto(String subjectPath, String filename, Model model) throws UnsupportedEncodingException {
+
+        //Make SubjectDto
+        SubjectDto subjectDto = SubjectDto.builder().subjectName(subjectName).build();
+        Long subjectId = subjectService.saveFile(subjectDto);
+        subjectDto.setId(subjectId);
+        model.addAttribute("subjects", subjectDto);
+
+        //Make AssignmentDto
         File subject = new File(subjectPath);
-        File[] fList = subject.listFiles();
-
-        for(int i=0;i<subject.list().length;i++){
-            String a = fList[i].toString();
-            byte[] euckrStringBuffer  = fList[i].getName().getBytes(Charset.forName("euc-kr"));
-            String codeName = new String(euckrStringBuffer, "euc-kr");
-
-            String codePath = subjectPath + "\\" + codeName;
-            String[] info = codeName.split("_|\\.");
-
-            CodeDto code = CodeDto.builder()
-                    .code_year(info[0])
-                    .assignmentNum(info[1])
-                    .studentNum(info[2])
-                    .subjectName(filename)
-                    .studentName(info[3])
-                    .filePath(codePath).build();
+        File[] assignmentfile = subject.listFiles();
+        for(int k=0;k<assignmentfile.length;k++){
+            AssignmentDto assignmentDto = AssignmentDto.builder().assignmentName(assignmentfile[k].getName()).subjectDto(subjectDto)
+                    .build();
+            System.out.println(assignmentDto.getId() + "ASDsadasd");
+            Long assignmentId = assignmentService.saveFile(assignmentDto);
+            assignmentDto.setId(assignmentId);
+            System.out.println(assignmentDto.getId() + "ASDdads");
+            model.addAttribute("assignments", assignmentDto);
 
 
-            codeService.saveFile(code);
+            File[] yearfile = assignmentfile[k].listFiles();
+            //이제 연도 학번으로 나눠질거임
 
-            model.addAttribute("codes", code);
 
-            System.out.println(model.getAttribute("codes")+"Sdasdasdsadsadsd");
+            //연도수별로 반복을 돈다
+            for(int i=0;i< yearfile.length;i++){
+                //파일의 자식디렉터리명을 모두 가져옴
+                String year = yearfile[i].getName();
+
+                //밑에 두줄 없어도 될듯
+                // byte[] euckrStringBuffer  = fList[i].getName().getBytes(Charset.forName("euc-kr"));
+                //String codeName = new String(euckrStringBuffer, "euc-kr");
+
+                File[] studentNum = yearfile[i].listFiles();
+                for(int m=0;m< studentNum.length;m++) {
+
+                    int Idx = studentNum[m].getName().lastIndexOf(".");
+                    String deleteExtensionName = studentNum[m].getName().substring(0, Idx);
+
+                    CodeDto code = CodeDto.builder()
+                            .code_year(year)
+                            .studentNum(deleteExtensionName)
+                            .subjectName(subjectName)
+                            .assignmentDto(assignmentDto)
+                            .filePath(studentNum[m].getPath()).build();
+
+                    codeService.saveFile(code);
+
+                    model.addAttribute("codes", code);
+
+
+                }
+            }
         }
+
     }
 
     public static List<File> decompress(File extractDir, File sourceZipFile) throws Exception {

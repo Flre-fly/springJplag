@@ -15,7 +15,6 @@ public class AssignmentDto {
     private SubjectDto subjectDto;
     public Assignment toEntity(){
         Assignment assignment = Assignment.builder().assignmentName(assignmentName)
-                .assignment_id(id)
                 .subject(subjectDto.toEntity()).build();
         return assignment;
     }

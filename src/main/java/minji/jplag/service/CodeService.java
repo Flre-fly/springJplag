@@ -27,7 +27,6 @@ public class CodeService {
         CodeDto codeDTO = CodeDto.builder()
                 .code_year(code.getCode_year())
                 .filePath(code.getFilePath())
-                .assignmentNum(code.getAssignmentNum())
                 .studentNum(code.getStudentNum())
                 .studentName(code.getStudentName())
                 .build();

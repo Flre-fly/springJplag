@@ -5,8 +5,15 @@
     <title>upload한 파일 목록</title>
 </head>
 <body>
-<ul>
-
+<ul><li th:each="subject : ${subjects}">
+    <li>[[${subjects.getName()}}]]</li>
+    <li th:each="code : ${codes}"><a href="#"></a>
+        <ul>
+            <li ><a href="#">[[${codes.getStudentNum()}]]</a></li>
+            <li ><a href="#">[[${codes.getSubjectName()}]]</a></li>
+        </ul>
+    </li>
+    </li>
 </ul>
 
 </body>

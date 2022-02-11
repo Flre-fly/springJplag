@@ -14,7 +14,6 @@ public class CodeDto {
     private String studentName;
     private String filePath;
     private String code_year;
-    private String assignmentNum;
     private String subjectName;
     private AssignmentDto assignmentDto;
     public Code toEntity(){
@@ -23,9 +22,7 @@ public class CodeDto {
                 .studentName(studentName)
                 .studentNum(studentNum)
                 .code_year(code_year)
-                .assignmentNum(assignmentNum)
                 .subjectName(subjectName)
-                .code_id(id)
                 .assignment(assignmentDto.toEntity())
                 .build();
 

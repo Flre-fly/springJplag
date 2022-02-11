@@ -15,7 +15,6 @@ public class SubjectDto {
 
     public Subject toEntity(){
             Subject subject = Subject.builder().subjectName(subjectName)
-                    .subject_id(id)
                     .build();
         return subject;
     }

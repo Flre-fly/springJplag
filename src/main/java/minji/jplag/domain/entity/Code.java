@@ -15,7 +15,7 @@ public class Code {
     @Column(name = "code_id", nullable = true)
     private Long code_id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 
@@ -25,7 +25,7 @@ public class Code {
     @Column(nullable = false)
     private String studentNum;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String studentName;
 
     @Column(nullable = false)
@@ -34,8 +34,6 @@ public class Code {
     @Column(nullable = false)
     private String code_year;
 
-    @Column(nullable = false)
-    private String assignmentNum;
 
 
 }
