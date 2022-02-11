@@ -1,14 +1,14 @@
 package minji.jplag.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import minji.jplag.domain.entity.Code;
-import minji.jplag.dto.CodeDTO;
+import minji.jplag.dto.CodeDto;
 import minji.jplag.service.CodeService;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +27,7 @@ import java.util.List;
 public class MainController {
     private static CodeService codeService;
 
+    @Autowired//생성자의 인자로 들어오는 변수들에 의존관계를 자동으로 주입해준다
     public MainController(CodeService codeService) throws IOException {
         this.codeService = codeService;
     }
@@ -79,7 +80,7 @@ public class MainController {
         //code에 대한 entity를 만들어 넘긴다
         makeCodeDto(subjectPath, filename, model);
 
-        return "uploadResult";
+        return "index";
     }
 
     public static void makeCodeDto(String subjectPath, String filename, Model model) throws UnsupportedEncodingException {
@@ -94,7 +95,7 @@ public class MainController {
             String codePath = subjectPath + "\\" + codeName;
             String[] info = codeName.split("_|\\.");
 
-            CodeDTO code = CodeDTO.builder()
+            CodeDto code = CodeDto.builder()
                     .code_year(info[0])
                     .assignmentNum(info[1])
                     .studentNum(info[2])

@@ -8,14 +8,15 @@ import minji.jplag.domain.entity.Code;
 @Getter
 @Setter
 @Builder
-public class CodeDTO {
+public class CodeDto {
+    private Long id;
     private String studentNum;
     private String studentName;
     private String filePath;
     private String code_year;
     private String assignmentNum;
     private String subjectName;
-
+    private AssignmentDto assignmentDto;
     public Code toEntity(){
         Code code = Code.builder()
                 .filePath(filePath)
@@ -24,6 +25,8 @@ public class CodeDTO {
                 .code_year(code_year)
                 .assignmentNum(assignmentNum)
                 .subjectName(subjectName)
+                .code_id(id)
+                .assignment(assignmentDto.toEntity())
                 .build();
 
         return code;

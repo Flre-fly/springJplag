@@ -10,15 +10,25 @@
 <body>
 <div id="menu">
     <ul>
-        <li th:each="code : ${codes}"><a href="#">[[${code.getStudentNum}]]</a>
+        <li th:each="code : ${codes}"><a href="#"></a>
             <ul>
-                <li ><a href="#">2019</a></li>
-                <li><a href="#">2018</a></li>
-                <li><a href="#">2017</a></li>
+                <li ><a href="#">[[${codes.getStudentNum()}]]</a></li>
+                <li ><a href="#">[[${codes.getSubjectName()}]]</a></li>
             </ul>
         </li>
+
     </ul>
 
+
+</div>
+<div class="dropdown">
+    <button class="dropbtn" th:each="code : ${codes}"></button>
+    <div class="dropdown-content">
+        <a href="#">홈</a>
+        <a href="#">회사소개</a>
+        <a href="#">제품소개</a>
+        <a href="#">오시는길</a>
+    </div>
 </div>
 <div class="button">
     <label for="uploadfile">

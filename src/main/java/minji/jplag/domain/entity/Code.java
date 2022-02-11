@@ -11,9 +11,13 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Code {
     @Id//얘는 pk이다 라는걸 알려주는 어노테이션
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_id", nullable = true)
     private Long code_id;
+
+    @ManyToOne
+    @JoinColumn(name = "assignment_id")
+    private Assignment assignment;
 
     @Column(nullable = false)
     private String subjectName;
