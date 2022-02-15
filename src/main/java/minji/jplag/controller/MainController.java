@@ -39,6 +39,16 @@ public class MainController {
         this.assignmentService = assignmentService;
 
     }
+    @GetMapping("/")
+    public String mainpage(Model model){
+        List<SubjectDto> subjectDtoList = subjectService.getFiles();
+        List<AssignmentDto> assignmentDtoList = assignmentService.getFiles();
+        List<CodeDto> codeDtoList = codeService.getFiles();
+        model.addAttribute("subjects", subjectDtoList);
+        model.addAttribute("assignments", assignmentDtoList);
+        model.addAttribute("codes", codeDtoList);
+        return "index";
+    }
 
     //RequestMapping이란
     //클라이언트의 요청을 처리할 메서드구현
@@ -88,6 +98,20 @@ public class MainController {
     }
     public static void makeCodeDto(String subjectPath, String subjectName, Model model) throws UnsupportedEncodingException {
 
+        //db에서 모두 꺼내서 이름이 같은지를 확인하는 작업이 있어야함
+        //그리고 이름이 같다면 새로 생성하지 말고 내용만 변경하도록
+
+        List<SubjectDto> subjectDtoList = subjectService.getFiles();
+        List<AssignmentDto> assignmentDtoList = assignmentService.getFiles();
+        for(int i=0;i<subjectDtoList.size();i++){
+            if(subjectDtoList.get(i).getSubjectName().equals(subjectName)) {
+                //기존것을 삭제한다
+                System.out.println(subjectDtoList.get(i).getId());
+
+                subjectService.delete(subjectDtoList.get(i).getId());
+
+            }
+        }
 
         //Make SubjectDto
         SubjectDto subjectDto = SubjectDto.builder().subjectName(subjectName).build();

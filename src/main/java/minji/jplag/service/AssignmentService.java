@@ -43,7 +43,9 @@ public class AssignmentService {
         for(int i =0;i<assignments.size();i++){
             AssignmentDto dto = AssignmentDto.builder()
                     .assignmentName(assignments.get(i).getAssignmentName())
-                    .subjectDto(SubjectDto.builder().subjectName(assignments.get(i).getSubject().getSubjectName()).build())
+                    .subjectDto(SubjectDto.builder().subjectName(assignments.get(i).getSubject().getSubjectName())
+                            .id(assignments.get(i).getSubject().getSubject_id()).build())
+                    .id(assignments.get(i).getAssignment_id())
                     .build();
             dtoes.add(dto);
         }
