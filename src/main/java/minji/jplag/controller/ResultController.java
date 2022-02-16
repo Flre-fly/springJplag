@@ -18,29 +18,40 @@ import java.util.List;
 @Slf4j
 public class ResultController {
     @GetMapping("/result")
-    public String resultFuc(@RequestParam String jarFilePath, @RequestParam String codePath, Model model){
+    public String resultFuc(@RequestParam String assignmentName,
+                            @RequestParam String subjectName, Model model){
 
         // subject/assingment 에 있는 code들을 바탕으로 코드 표절률검사
         //test
         List command = new ArrayList();
         //command.add("cmd");
+        //cmd창으로 명령어 실행
+        command.add("cmd");
+        command.add("/c");
         command.add("java");
         command.add("-jar");
-        command.add(jarFilePath);//jar파일위치
-        command.add(codePath);//test코드들이잇는 파일의 위치
-        StringBuffer resultLine = new StringBuffer();
+        command.add("./src/main/resources/static/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
+        //command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName);//test코드들이잇는 파일의 위치
+        command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName + "/2018");//test코드들이잇는 파일의 위치
+        List<String> resultLine = new ArrayList<>();
+        String temp="";
         try{
             Process process = new ProcessBuilder(command).start();
             BufferedReader outReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
+            //명령어 실행한 결과를 받아서 출력하기
             while ((line = outReader.readLine()) != null) {
-                resultLine.append(line);
+                resultLine.add(line);
+                System.out.println(line);
+                temp=line;
             }
         } catch (IOException e) {
             e.printStackTrace();
 
         }
-        model.addAttribute("result", resultLine);
-        return "result";
+        String[] resultPath = temp.split(" ");
+
+        model.addAttribute("results",resultLine);
+        return "redirect:" + "http://www.naver.com";
     }
 }

@@ -67,17 +67,15 @@
 										<h2>Result</h2>
 									</header>
 									<ul th:each="subject : ${subjects}">
-										<script>
 
-										</script>
+										<li>
+										<span class="opener"><a href="index.html">[[${subject.subjectName}]]</a></span>
+											<ul>
+												<li th:each="assignment : ${assignments}" th:if="${subject.getId() == assignment.getSubjectDto().getId()}">
+													<a th:href="@{/result(assignmentName=${assignment.getAssignmentName()}, subjectName=${assignment.getSubjectDto().getSubjectName()})}">[[${assignment.assignmentName}]]</a>
 
-										<li th:each="assignment : ${assignments}">
-
-										<span class="opener" ><a href="index.html">[[${subject.subjectName}]]</a></span>
-										<ul>
-												<li th:if="${subject.getSubjectName()==assignment.getSubjectDto().getSubjectName()}" >[[${assignment.assignmentName}]]</li>
-										</ul>
-
+													</li>
+											</ul>
 										</li>
 
 

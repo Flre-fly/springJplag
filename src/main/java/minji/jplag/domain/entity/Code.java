@@ -15,7 +15,7 @@ public class Code {
     @Column(name = "code_id", nullable = true)
     private Long code_id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST )
+    @ManyToOne
     @JoinColumn(name = "assignment_id")
     private Assignment assignment;
 

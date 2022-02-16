@@ -4,6 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import minji.jplag.dto.AssignmentDto;
 import minji.jplag.dto.CodeDto;
 import minji.jplag.dto.SubjectDto;
+import minji.jplag.repository.AssignmentRepository;
+import minji.jplag.repository.SubjectRepository;
 import minji.jplag.service.AssignmentService;
 import minji.jplag.service.CodeService;
 import minji.jplag.service.SubjectService;
@@ -31,12 +33,22 @@ public class MainController {
     private static CodeService codeService;
     private static SubjectService subjectService;
     private static AssignmentService assignmentService;
+    //test용
+    private static SubjectRepository subjectRepository;
+    private static AssignmentRepository assignmentRepository;
 
     @Autowired//생성자의 인자로 들어오는 변수들에 의존관계를 자동으로 주입해준다
-    public MainController(CodeService codeService, SubjectService subjectService, AssignmentService assignmentService) throws IOException {
+    public MainController(CodeService codeService,
+                          SubjectService subjectService,
+                          AssignmentService assignmentService,
+                          SubjectRepository subjectRepository,
+                          AssignmentRepository assignmentRepository){
+        this.assignmentRepository = assignmentRepository;
         this.codeService = codeService;
         this.subjectService = subjectService;
         this.assignmentService = assignmentService;
+        this.subjectRepository = subjectRepository;
+        //나중에 이부분 삭제 repository부분
 
     }
     @GetMapping("/")
@@ -99,10 +111,9 @@ public class MainController {
     public static void makeCodeDto(String subjectPath, String subjectName, Model model) throws UnsupportedEncodingException {
 
         //db에서 모두 꺼내서 이름이 같은지를 확인하는 작업이 있어야함
-        //그리고 이름이 같다면 새로 생성하지 말고 내용만 변경하도록
-
+        //그리고 이름이 같다면 새로 생성하지 말고 내용만 변경하도록(대체되도록)
+        //예를들어 과목명이 a인데 같은 과목명의 파일이 들어온다면 새로들어온파일로 기존것을 대체하도록
         List<SubjectDto> subjectDtoList = subjectService.getFiles();
-        List<AssignmentDto> assignmentDtoList = assignmentService.getFiles();
         for(int i=0;i<subjectDtoList.size();i++){
             if(subjectDtoList.get(i).getSubjectName().equals(subjectName)) {
                 //기존것을 삭제한다
@@ -112,6 +123,7 @@ public class MainController {
 
             }
         }
+        //연관관계가 subject > assignment > code순이니까 먼저 subject부터 만들어서 save해준다
 
         //Make SubjectDto
         SubjectDto subjectDto = SubjectDto.builder().subjectName(subjectName).build();
@@ -119,18 +131,18 @@ public class MainController {
         subjectDto.setId(subjectId);
         model.addAttribute("subjects", subjectDto);
 
+        //즉 subject는 제대로 저장되어있다
+        System.out.println(subjectRepository.getById(subjectDto.getId()));
+
         //Make AssignmentDto
         File subject = new File(subjectPath);
         File[] assignmentfile = subject.listFiles();
         for(int k=0;k<assignmentfile.length;k++){
             AssignmentDto assignmentDto = AssignmentDto.builder().assignmentName(assignmentfile[k].getName()).subjectDto(subjectDto)
                     .build();
-            System.out.println(assignmentDto.getId() + "ASDsadasd");
             Long assignmentId = assignmentService.saveFile(assignmentDto);
             assignmentDto.setId(assignmentId);
-            System.out.println(assignmentDto.getId() + "ASDdads");
             model.addAttribute("assignments", assignmentDto);
-
 
             File[] yearfile = assignmentfile[k].listFiles();
             //이제 연도 학번으로 나눠질거임
@@ -140,10 +152,6 @@ public class MainController {
             for(int i=0;i< yearfile.length;i++){
                 //파일의 자식디렉터리명을 모두 가져옴
                 String year = yearfile[i].getName();
-
-                //밑에 두줄 없어도 될듯
-                // byte[] euckrStringBuffer  = fList[i].getName().getBytes(Charset.forName("euc-kr"));
-                //String codeName = new String(euckrStringBuffer, "euc-kr");
 
                 File[] studentNum = yearfile[i].listFiles();
                 for(int m=0;m< studentNum.length;m++) {
@@ -157,8 +165,9 @@ public class MainController {
                             .subjectName(subjectName)
                             .assignmentDto(assignmentDto)
                             .filePath(studentNum[m].getPath()).build();
-
-                    codeService.saveFile(code);
+                    System.out.println(assignmentRepository.getById(assignmentDto.getId()));
+                    Long codeId = codeService.saveFile(code);
+                    code.setId(codeId);
 
                     model.addAttribute("codes", code);
 

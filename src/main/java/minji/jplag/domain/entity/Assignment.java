@@ -18,7 +18,7 @@ public class Assignment {
     @Column(nullable = false)
     private String assignmentName;
 
-    @ManyToOne(cascade = CascadeType.PERSIST )
+    @ManyToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;
 }

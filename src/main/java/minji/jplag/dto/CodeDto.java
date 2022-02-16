@@ -22,6 +22,7 @@ public class CodeDto {
                 .studentName(studentName)
                 .studentNum(studentNum)
                 .code_year(code_year)
+                .code_id(id)
                 .subjectName(subjectName)
                 .assignment(assignmentDto.toEntity())
                 .build();
