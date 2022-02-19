@@ -59,7 +59,7 @@ public class MainController {
         model.addAttribute("subjects", subjectDtoList);
         model.addAttribute("assignments", assignmentDtoList);
         model.addAttribute("codes", codeDtoList);
-        return "index";
+        return "main";
     }
 
     //RequestMapping이란
@@ -105,6 +105,7 @@ public class MainController {
 
         //code에 대한 entity를 만들어 넘긴다
         makeCodeDto(subjectPath, filename, model);
+        model.addAttribute("results","");
 
         return "index2";
     }

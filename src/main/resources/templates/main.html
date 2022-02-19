@@ -9,8 +9,7 @@
 		<title>Plagiarism check</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="/assets/css/main.
-		css" />
+		<link rel="stylesheet" href="/assets/css/main.css" />
 	</head>
 	<body class="is-preload">
 
@@ -23,7 +22,7 @@
 
 							<!-- Header -->
 								<header id="header">
-									<a href="index.html" class="logo"><strong>Editorial</strong> by HTML5 UP</a>
+									<a class="logo"><strong>Plagiarism check</strong>  result</a>
 									<ul class="icons">
 										<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
 										<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
@@ -36,19 +35,10 @@
 							<!-- Banner -->
 								<section id="banner">
 									<div class="content">
-										<header>
-											<h1>Hi, I’m Editorial<br />
-											by HTML5 UP</h1>
-											<p>A free and fully responsive site template</p>
-										</header>
-										<p>Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin aliquam facilisis ante interdum congue. Integer mollis, nisl amet convallis, porttitor magna ullamcorper, amet egestas mauris. Ut magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas. Pellentesque sapien ac quam. Lorem ipsum dolor sit nullam.</p>
-										<ul class="actions">
-											<li><a href="#" class="button big">Learn More</a></li>
+										<ul  th:each="result : ${results}"  >
+											[[${result}]]<br>
 										</ul>
 									</div>
-									<span class="image object">
-										<img src="/images/pic10.jpg" alt="" />
-									</span>
 								</section>
 
 
@@ -64,12 +54,12 @@
 							<!-- Menu -->
 								<nav id="menu">
 									<header class="major">
-										<h2>Result</h2>
+										<h2>Subject</h2>
 									</header>
 									<ul th:each="subject : ${subjects}">
 
 										<li>
-										<span class="opener"><a href="index.html">[[${subject.subjectName}]]</a></span>
+										<span class="opener">[[${subject.subjectName}]]</span>
 											<ul>
 												<li th:each="assignment : ${assignments}" th:if="${subject.getId() == assignment.getSubjectDto().getId()}">
 													<a th:href="@{/result(assignmentName=${assignment.getAssignmentName()}, subjectName=${assignment.getSubjectDto().getSubjectName()})}">[[${assignment.assignmentName}]]</a>
