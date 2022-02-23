@@ -35,18 +35,23 @@ public class ResultController {
     public String resultFuc(@RequestParam String assignmentName,
                             @RequestParam String subjectName, Model model) throws IOException {
 
+        String allCode = "all";
+
         // subject/assingment 에 있는 code들을 바탕으로 코드 표절률검사
         //test
         List command = new ArrayList();
         //command.add("cmd");
         //cmd창으로 명령어 실행
         command.add("cmd");
+
         command.add("/c");
         command.add("java");
         command.add("-jar");
         command.add("./src/main/resources/static/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
         //command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName);//test코드들이잇는 파일의 위치
-        command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName + "/2018");//test코드들이잇는 파일의 위치
+        command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName + "/" + allCode);//test코드들이잇는 파일의 위치
+
+
         List<String> resultLine = new ArrayList<>();
         String temp="";
         try{
@@ -81,8 +86,12 @@ public class ResultController {
 
         //result 하위파일들의 이름을 모두 뽑아서...
         String[] subfileList = new File(resultPath[3]).list();
+        if (subfileList==null){
+            return "/jplagError.html";
+        }
         for(int i=0;i<subfileList.length;i++){
             copy(resultPath[3], subfileList[i]);
+
         }
 
         return "/index.html";

@@ -58,32 +58,36 @@ public class SubjectService {
     public void delete(Long id){
         //subject > assignment > code
         SubjectDto subjectDto = subjectDto(id);
-        System.out.println(subjectDto.getId());
+
 
         List<AssignmentDto> assignmentDtoList = assignmentService.getFiles();
         AssignmentDto deleteAssignmentDto;
 
-        //code를 모두 없애고 assignment를 없앤다
 
         //code를 모두 없애고 assignment를 없앤다
+
+        //모든 assignment들 중에서
         for(int i=0;i<assignmentDtoList.size();i++){
+            //제거하고자하는 subject랑 이름이 같다면 삭제해준다
             if(assignmentDtoList.get(i).getSubjectDto().getSubjectName().equals(subjectDto.getSubjectName())){
                 deleteAssignmentDto = assignmentDtoList.get(i);
 
+                //모든 code에 대해서
                 List<CodeDto> codeDtoList = codeService.getFiles();
                 for(int k=0;k<codeDtoList.size();k++){
-                    if(codeDtoList.get(k).getAssignmentDto().getSubjectDto().getSubjectName().equals(codeDtoList.get(i).getAssignmentDto().getSubjectDto().getSubjectName())){
+                    //모든code를 돌아서 subject이름이 같은 code를 없애나간다
+                    if(codeDtoList.get(k).getAssignmentDto().getSubjectDto().getSubjectName().equals(subjectDto.getSubjectName())){
 
                         codeRepository.deleteById(codeDtoList.get(k).getId());
                     }
                 }
+                //code를 다 지우면 그 code와 연관관계를맺고있는애도 삭제시켜준다
                 assignmentRepository.deleteById(deleteAssignmentDto.getId());
 
                 }
         }
         subjectRepository.deleteById(subjectDto.getId());
 
-        System.out.println(subjectRepository.findById(subjectDto.getId()));
     }
 
 

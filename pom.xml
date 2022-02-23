@@ -42,9 +42,19 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.21</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>de.jplag</groupId>
+			<artifactId>jplag</artifactId>
+			<version>3.0.0</version>
 		</dependency>
 
 		<dependency>
@@ -91,7 +101,26 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+
+
+			<plugin>
+				<!-- Build an executable JAR -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>minji.jplag.JplagApplication</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+
+
+
 		</plugins>
 	</build>
+<packaging>jar</packaging>
 
 </project>
