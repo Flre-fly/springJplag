@@ -42,14 +42,15 @@ public class ResultController {
         List command = new ArrayList();
         //command.add("cmd");
         //cmd창으로 명령어 실행
+
         command.add("cmd");
 
         command.add("/c");
         command.add("java");
         command.add("-jar");
-        command.add("./src/main/resources/static/jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
+        command.add("C:\\Users\\jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
         //command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName);//test코드들이잇는 파일의 위치
-        command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName + "/" + allCode);//test코드들이잇는 파일의 위치
+        command.add("C:\\Users\\" +subjectName+"\\" + assignmentName + "\\" + allCode);//test코드들이잇는 파일의 위치
 
 
         List<String> resultLine = new ArrayList<>();
@@ -84,8 +85,10 @@ public class ResultController {
         //return "ddd";
         //return "index";
 
+
         //result 하위파일들의 이름을 모두 뽑아서...
         String[] subfileList = new File(resultPath[3]).list();
+
         if (subfileList==null){
             return "/jplagError.html";
         }
@@ -105,6 +108,7 @@ public class ResultController {
             copyfilePath += temp[i] + "/";
         }
         copyfilePath += "springJplag\\src\\main\\resources\\templates\\" + fileName;
+
 
         //만약에 .html로 끝나면 htmlcopy로 보내버린다
         String[] extension = fileName.split("\\.");
@@ -144,10 +148,7 @@ public class ResultController {
         }
         copyfilePath += "springJplag\\src\\main\\resources\\templates\\" + fileName;
 
-
-        if(fileName.equals("match1.html")){
-            int k = 2;
-        }
+        System.out.println("copyfilePath!!!!!!!!!!!!!!!!" + copyfilePath );
 
         // 1. 원본 File, 복사할 File 준비
         File file = new File(resultPath + "\\" +fileName);

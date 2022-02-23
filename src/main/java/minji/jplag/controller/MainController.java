@@ -63,7 +63,9 @@ public class MainController {
             for (int i=0;i<subjectDtoList.size();i++){
                 if(subjectDtoList.get(i).getSubjectName().equals(subjectName[k])){
                     subjectService.delete(subjectDtoList.get(i).getId());
-                    String fileDir = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
+                    //String fileDir = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
+                    String fileDir = "C:\\Users";
+
                     //서버에 저장되어있는 파일도 삭제해준다
                     deleteFolder(fileDir + "/" + subjectName[k]);
                 }
@@ -104,8 +106,8 @@ public class MainController {
         }
 
         //userdir와 뒤에있는 path를 결합하여 하나의 path로 만드는과정인거임
-        String fileDir = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
-
+        //String fileDir = Paths.get(System.getProperty("user.dir"), "src/main/resources/static/files").toString();
+        String fileDir = "C:\\Users";
         //이거 이름같을경우 예외처리도 해줘야함
         //확장자 제거
         int Idx = uploadfile.getOriginalFilename().lastIndexOf(".");
@@ -273,9 +275,6 @@ public class MainController {
         File subject = new File(subjectPath);
         File[] assignmentfile = subject.listFiles();
         for(int k=0;k<assignmentfile.length;k++){
-            if(k==1){
-                int s = 2;
-            }
             AssignmentDto assignmentDto = AssignmentDto.builder().assignmentName(assignmentfile[k].getName()).subjectDto(subjectDto)
                     .build();
             Long assignmentId = assignmentService.saveFile(assignmentDto);
@@ -365,7 +364,6 @@ public class MainController {
                         fis.close();
                         fos.close();
                     } catch (IOException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
