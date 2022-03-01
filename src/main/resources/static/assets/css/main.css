@@ -62,7 +62,7 @@ input, select, textarea {
 
 /* Basic */
 @-ms-viewport {
-  width: device-width; }
+  width: auto; }
 
 body {
   -ms-overflow-style: scrollbar; }
@@ -1705,7 +1705,7 @@ button,
       -ms-flex-direction: column;
       flex-direction: column;
       -moz-align-items: -moz-flex-start;
-      -webkit-align-items: -webkit-flex-start;
+      -webkit-align-items: stretch;
       -ms-align-items: -ms-flex-start;
       align-items: flex-start; }
       .features article .icon {

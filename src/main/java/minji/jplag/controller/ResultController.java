@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -24,6 +26,9 @@ public class ResultController {
     private static CodeService codeService;
     private static SubjectService subjectService;
     private static AssignmentService assignmentService;
+
+    //
+    public Map<String, String> htmls = new HashMap<>();
 
     @Autowired
     public ResultController(CodeService codeService, SubjectService subjectService, AssignmentService assignmentService){
@@ -34,10 +39,16 @@ public class ResultController {
     @GetMapping("/match")
     public String match(@RequestParam String htmlName, Model model){
         System.out.println(htmlName);
-        String realHtmlName = "match" + htmlName + ".html";
+        String realHtmlName = "match" + htmlName;
 
+        String content =  htmls.get(realHtmlName);
+        model.addAttribute("realMatch", content);
 
         return "match.html";
+    }
+    @GetMapping("/test")
+    public String test1(){
+        return "temp.html";
     }
     @GetMapping("/result")
     public String resultFuc(@RequestParam String assignmentName,
@@ -73,17 +84,19 @@ public class ResultController {
             //명령어 실행한 결과를 받아서 출력하기
             while ((line = outReader.readLine()) != null) {
                 if (line.equals("<<<<START>>>>")){
-                    tempname=line = outReader.readLine();
+                    line = outReader.readLine();
+                    tempname = line.substring(0, line.lastIndexOf("."));
                     flag = true;
                 }
                 else if(line.equals("<<<<FIN>>>>")){
                     model.addAttribute(tempname, tempcontent);
+                    htmls.put(tempname, tempcontent);
                     tempname = "";
                     tempcontent = "";
                     flag = false;
                 }
                 else if(flag){
-                    tempcontent += line;
+                    tempcontent += line  + "\n";
                 }
                 else{
                     resultLine.add(line);
@@ -117,14 +130,14 @@ public class ResultController {
         String[] subfileList = new File(resultPath[3]).list();
 
         if (subfileList==null){
-            return "/jplagError.html";
+            return "jplagError.html";
         }
-        for(int i=0;i<subfileList.length;i++){
+        /*for(int i=0;i<subfileList.length;i++){
             copy(resultPath[3], subfileList[i]);
 
-        }
+        }*/
 
-        return "/index.html";
+        return "index.html";
         //return htmlCopy(resultPath[3] + "/main.html");
     }
     public void copy(String path, String fileName) throws IOException {

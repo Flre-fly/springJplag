@@ -90,7 +90,6 @@ public class MainController {
         model.addAttribute("subjects", subjectDtoList);
         model.addAttribute("assignments", assignmentDtoList);
         model.addAttribute("codes", codeDtoList);
-        model.addAttribute("test1","<br>으악ㄴ</br>");
 
         return "main";
     }
