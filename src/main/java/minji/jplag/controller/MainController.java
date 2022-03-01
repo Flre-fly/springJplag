@@ -41,6 +41,7 @@ public class MainController {
     private static SubjectRepository subjectRepository;
     private static AssignmentRepository assignmentRepository;
 
+
     @Autowired//생성자의 인자로 들어오는 변수들에 의존관계를 자동으로 주입해준다
     public MainController(CodeService codeService,
                           SubjectService subjectService,
@@ -69,6 +70,7 @@ public class MainController {
                     //서버에 저장되어있는 파일도 삭제해준다
                     deleteFolder(fileDir + "/" + subjectName[k]);
                 }
+
             }
         }
 
@@ -88,6 +90,8 @@ public class MainController {
         model.addAttribute("subjects", subjectDtoList);
         model.addAttribute("assignments", assignmentDtoList);
         model.addAttribute("codes", codeDtoList);
+        model.addAttribute("test1","<br>으악ㄴ</br>");
+
         return "main";
     }
 

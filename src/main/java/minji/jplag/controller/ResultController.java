@@ -31,6 +31,14 @@ public class ResultController {
         this.subjectService = subjectService;
         this.assignmentService = assignmentService;
     }
+    @GetMapping("/match")
+    public String match(@RequestParam String htmlName, Model model){
+        System.out.println(htmlName);
+        String realHtmlName = "match" + htmlName + ".html";
+
+
+        return "match.html";
+    }
     @GetMapping("/result")
     public String resultFuc(@RequestParam String assignmentName,
                             @RequestParam String subjectName, Model model) throws IOException {
@@ -47,9 +55,9 @@ public class ResultController {
 
         command.add("/c");
         command.add("java");
-        command.add("-jar");
-        command.add("C:\\Users\\jplag-3.0.0-jar-with-dependencies.jar");//jar파일위치
-        //command.add("./src/main/resources/static/files/"+subjectName+"/" + assignmentName);//test코드들이잇는 파일의 위치
+        command.add("-cp");
+        command.add("C:\\Users\\User\\IdeaProjects\\JPlag\\out\\artifacts\\JPlag_jar\\JPlag.jar");//jar파일위치
+        command.add("de.jplag.CLI");
         command.add("C:\\Users\\" +subjectName+"\\" + assignmentName + "\\" + allCode);//test코드들이잇는 파일의 위치
 
 
@@ -59,11 +67,30 @@ public class ResultController {
             Process process = new ProcessBuilder(command).start();
             BufferedReader outReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
+            String tempname = "";
+            boolean flag = false;
+            String tempcontent = "";
             //명령어 실행한 결과를 받아서 출력하기
             while ((line = outReader.readLine()) != null) {
-                resultLine.add(line);
-                System.out.println(line);
-                temp=line;
+                if (line.equals("<<<<START>>>>")){
+                    tempname=line = outReader.readLine();
+                    flag = true;
+                }
+                else if(line.equals("<<<<FIN>>>>")){
+                    model.addAttribute(tempname, tempcontent);
+                    tempname = "";
+                    tempcontent = "";
+                    flag = false;
+                }
+                else if(flag){
+                    tempcontent += line;
+                }
+                else{
+                    resultLine.add(line);
+                    System.out.println(line);
+                    temp=line;
+                }
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,8 +134,8 @@ public class ResultController {
         for(int i =0;i<idx;i++){
             copyfilePath += temp[i] + "/";
         }
-        copyfilePath += "springJplag\\src\\main\\resources\\templates\\" + fileName;
-
+        //copyfilePath += "springJplag\\src\\main\\resources\\templates\\" + fileName;
+        copyfilePath = "C:\\Users\\htmls\\" + fileName;
 
         //만약에 .html로 끝나면 htmlcopy로 보내버린다
         String[] extension = fileName.split("\\.");
@@ -146,7 +173,7 @@ public class ResultController {
         for(int i =0;i<idx;i++){
             copyfilePath += temp[i] + "/";
         }
-        copyfilePath += "springJplag\\src\\main\\resources\\templates\\" + fileName;
+        copyfilePath += "springJplag/src/main/resources/templates/" + fileName;
 
         System.out.println("copyfilePath!!!!!!!!!!!!!!!!" + copyfilePath );
 
